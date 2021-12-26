@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="ToDo.MainPage"
+             xmlns:viewModels="clr-namespace:ToDo.ViewModels;assembly=ToDo"
+             xmlns:models="clr-namespace:ToDo.Models;assembly=ToDo"
+             x:DataType="viewModels:MainViewModel">
+    <Frame>
+        <Frame.Background>
+            <LinearGradientBrush StartPoint="0,0"
+                             EndPoint="1,0">
+                <GradientStop Color="#85B0F2" 
+                          Offset="0.0"/>
+                <GradientStop Color="#00DDCF" 
+                          Offset="0.5"/>
+                <GradientStop Color="#EDE067" 
+                          Offset="1.0"/>
+            </LinearGradientBrush>
+        </Frame.Background>
+        <StackLayout Orientation="Vertical">
+            <Entry Placeholder="Write to do"
+                       Text="{Binding ToDoName, Mode=TwoWay}"/>
+            <ListView ItemsSource="{Binding TodoCollection}"
+                          RowHeight="60"
+                          HeightRequest="1000"
+                          SelectionMode="None">
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                        <ViewCell>
+                            <ViewCell.View>
+                                <Frame Padding="5"
+                                           CornerRadius="5"
+                                           Margin="5">
+                                    <Frame.Triggers>
+                                        <DataTrigger Binding="{Binding CheckReady, Mode=OneWay}" Value="True"
+                                                         TargetType="{x:Type Frame}">
+                                            <Setter Property="BorderColor" Value="DarkCyan" />
+                                            <Setter Property="CornerRadius" Value="16" />
+                                            <Setter Property="HasShadow" Value="True" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding CheckReady, Mode=OneWay}" Value="False"
+                                                         TargetType="{x:Type Frame}">
+                                            <Setter Property="BorderColor" Value="Red" />
+                                            <Setter Property="CornerRadius" Value="15" />
+                                            <Setter Property="HasShadow" Value="True" />
+                                        </DataTrigger>
+                                    </Frame.Triggers>
+
+                                    <FlexLayout x:DataType="{x:Type models:Task}"
+                                                    JustifyContent="SpaceBetween">
+
+                                        <CheckBox IsChecked="{Binding CheckReady, Mode=TwoWay}"
+                                                      FlexLayout.Basis="10%"
+                                                      Color="Black"/>
+                                        <Entry 
+                                                     Text="{Binding Descr}"
+                                                     TextColor="Black"
+                                                    
+                                                     VerticalTextAlignment="Center"/>
+                                        <Button Text="Delete"
+                                                    FontSize="12"
+                                                    TextColor="Black"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=DeleteCollection}"
+                                                         CommandParameter="{Binding .}"
+                                                         BackgroundColor="White"/>
+                                    </FlexLayout>
+                                </Frame>
+                            </ViewCell.View>
+                        </ViewCell>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
+            </ListView>
+            <Button Text="Add"
+                         Padding="0, 0, 0, 0"
+                         FontSize="26"
+                            BackgroundColor="White"
+                            CornerRadius="16"
+                         Command="{Binding Source={RelativeSource AncestorType={x:Type viewModels:MainViewModel}}, Path=AddCollection}">
+                <Button.Triggers>
+                    <EventTrigger Event="Clicked">
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+        </StackLayout>
+
+    </Frame>
+
+
+</ContentPage>
